@@ -104,3 +104,12 @@ export const getUser =async(req:Request,res:Response):Promise<void> =>{
   }
 }
 
+export  const logout=async  (req:Request,res:Response):Promise<void>=> {
+try{
+
+}catch(error){
+  console.log(error)
+}
+  
+}
+
