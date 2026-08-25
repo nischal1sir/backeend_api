@@ -2,6 +2,7 @@ import mongoose, { Document, Schema } from "mongoose";
 
 export enum UserRole {
   ADMIN = "Admin",
+  USER = "User",
 }
 
 export interface IUser extends Document {
@@ -23,6 +24,7 @@ const userSchema = new Schema<IUser>(
       trim: true,
       minlength: [2, "Username must be at least 2 characters"],
       maxlength: [50, "Username cannot exceed 50 characters"],
+      lowercase:true,
     },
 
     userEmail: {
@@ -58,11 +60,12 @@ const userSchema = new Schema<IUser>(
 
     role: {
       type: String,
+      lowercase:true,
       enum: {
         values: Object.values(UserRole),
         message: "Invalid user role",
       },
-      default: UserRole.ADMIN,
+      default: UserRole.USER,
     },
 
     approved: {

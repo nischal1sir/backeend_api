@@ -1,4 +1,4 @@
-import mongoose, { connect } from "mongoose"
+import mongoose from "mongoose"
 
 const ConnectDb = async():Promise<void>=>{
 try{
@@ -7,6 +7,7 @@ console.log(`Database Connect Succ:${connect.connection.host}`)
 
 }catch(ex){
 console.log(ex)
+throw ex;
 }
 }
 export default ConnectDb;
