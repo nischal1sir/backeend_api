@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import User, { UserRole } from "../Model/usermodel";
-import { promises } from "node:dns";
+import jwt from "jsonwebtoken";
+import { fail } from "node:assert";
 
 export const registerUser = async (
   req: Request,
@@ -111,6 +112,25 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       });
       return;
     }
+    //create the refresh token
+    ///save the refresh tooken
+    const refreshToken = jwt.sign(
+      { userId: user._id },
+      process.env.REFRESH_SECRET!,
+    );
+    user.refreshToken = refreshToken;
+
+    const accessToken= jwt.sign(
+      {
+        userId:user._id
+      },
+      process.env.ACCESS_SECRET!,
+    );
+
+    user.accessToken= accessToken;
+    // to save 
+    await user.save();
+
 
     const userResponse = user.toObject();
 
@@ -152,6 +172,7 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
     });
   }
 };
+
 /// fin by user name
 export const userGetByName = async (
   req: Request,
@@ -161,7 +182,7 @@ export const userGetByName = async (
     const { userName } = req.body;
     //chek garne ya
     const userCheck = userName.toLowerCase().trim();
-    const userExist = await User.findOne({ userNaame: userCheck });
+    const userExist = await User.findOne({userCheck });
 
     if (!userExist) {
       res.status(401).json({
@@ -169,12 +190,12 @@ export const userGetByName = async (
         data: `the ${userName} didnot exist in our system`,
       });
     }
-    if (userExist) {
+    
       res.status(402).json({
         success: true,
         data: `the ${userName} data is here`,
-      });
-    }
+      })
+    
   } catch (exp) {
     console.log("the server got error", exp);
     res.status(500).json({
@@ -214,3 +235,34 @@ export const deleteUser = async (
     return;
   }
 };
+
+
+///lougout 
+ export const logoutUser= async (req:Request,res:Response):Promise<void>=>{
+  try{
+ const {refreshToken} = req.body;
+ 
+  const checkRefreshToken= await User.findOne({refreshToken});
+  if(!checkRefreshToken){
+    res.status(402).json({
+      data:`invalid refresh token`
+   });
+    return;
+  }
+
+  checkRefreshToken.refreshToken=null;
+  
+  await checkRefreshToken.save();
+  res.status(200).json({
+    succes:true,
+    data:"succesfully logout"
+  })
+  }catch(exp){
+    console.log("error in serve",exp)
+     res.status(400).json({
+      success:false,
+      data:"internal server eeror"
+    })
+  }
+ 
+}
