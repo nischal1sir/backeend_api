@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-import User, { UserRole } from "../Model/usermodel";
+import User, { } from "../Model/usermodel";
 import {Request,Response } from "express";
-//patch
+//patch it update only user send where put replace all !
 export const updateData= async (req:Request,res:Response):Promise<void>=>{
   try{
- const {userId,userName} =req.body
+ const {userId,userName,userEmail} =req.body
   if(!mongoose.isValidObjectId(userId)){
     res.status(401).json({
         success:false,
@@ -21,17 +21,51 @@ export const updateData= async (req:Request,res:Response):Promise<void>=>{
     })
     return;
    }
-   ///name change here
+   //validate the empty username in req body
+   if(userName==""){
+    res.status(400).json({
+        data:"user not is empty "
+    })
+    return
+   }
+   ///name change here // undefine=not assign like  const userNme;/ logic: if username is not equal to empty then execeut ethe nisd e logic
    if (userName !==undefined){
     findUser.userName =userName;
    }
+   /// the new email shoul dbe uniqe na so lets chke the email if its unique then the old email 
+   if (userEmail!==undefined){
+        if(userEmail===findUser.userEmail){
+            res.status(400).json({
+                succes:false,
+                data:"the email should be new form the old one"
+            })
+        }
+        const uniqueEmail= await User.findOne({
+            userEmail:userEmail,
+            _id:{$ne:userId}
+        })
+        // uniqueemail null ayerna bane execute hunxa like its also called falsy where only execute if any data come as objects 
+        if(uniqueEmail!==null){
+            res.status(400).json({
+                succes:false,
+                data:"email alread taken by someone"
+            })
+        }
+    findUser.userEmail=userEmail;
+    return;
+   }
    await findUser.save();
+   
    res.status(200).json({
     success:true,
-    data:"the username change succesfully"
+    data:"the username and email has been change succesfully"
    })
 
   }catch(exp){
-    console.log("internal server errrr",exp)
+ console.error("internal server error", exp);
+    res.status(500).json({
+        success: false,
+        data: "Internal server error"
+    });
   }
 }

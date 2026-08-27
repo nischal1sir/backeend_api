@@ -1,0 +1,17 @@
+| Type           | Operator  | Meaning               | Example                                       |
+| -------------- | --------- | --------------------- | --------------------------------------------- |
+| **Comparison** | `$eq`     | Equal to              | `{ age: { $eq: 25 } }`                        |
+|                | `$ne`     | **Not equal** to      | `{ status: { $ne: "banned" } }`               |
+|                | `$gt`     | Greater than          | `{ price: { $gt: 100 } }`                     |
+|                | `$gte`    | Greater than or equal | `{ age: { $gte: 18 } }`                       |
+|                | `$lt`     | Less than             | `{ stock: { $lt: 5 } }`                       |
+|                | `$lte`    | Less than or equal    | `{ score: { $lte: 100 } }`                    |
+|                | `$in`     | Matches any in array  | `{ role: { $in: ["admin", "mod"] } }`         |
+|                | `$nin`    | Not in array          | `{ status: { $nin: ["deleted", "banned"] } }` |
+| **Logical**    | `$and`    | All conditions true   | `{ $and: [{a:1}, {b:2}] }`                    |
+|                | `$or`     | Any condition true    | `{ $or: [{age:18}, {vip:true}] }`             |
+|                | `$not`    | Inverts condition     | `{ age: { $not: { $gt: 18 } } }`              |
+|                | `$nor`    | None are true         | `{ $nor: [{a:1}, {b:2}] }`                    |
+| **Element**    | `$exists` | Field exists?         | `{ phone: { $exists: true } }`                |
+|                | `$type`   | Field is type         | `{ age: { $type: "number" } }`                |
+| **Regex**      | `$regex`  | Pattern match         | `{ name: { $regex: /^A/ } }`                  |
