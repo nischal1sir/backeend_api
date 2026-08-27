@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import User, { UserRole } from "../Model/usermodel";
 import jwt from "jsonwebtoken";
-import { fail } from "node:assert";
+import mongoose from "mongoose";
 
 export const registerUser = async (
   req: Request,
@@ -74,6 +74,8 @@ export const registerUser = async (
   }
 };
 
+
+/// login routes
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const { userEmail, userPassword } = req.body;
@@ -118,19 +120,19 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       { userId: user._id },
       process.env.REFRESH_SECRET!,
     );
+
     user.refreshToken = refreshToken;
 
-    const accessToken= jwt.sign(
+    const accessToken = jwt.sign(
       {
-        userId:user._id
+        userId: user._id,
       },
       process.env.ACCESS_SECRET!,
     );
-
-    user.accessToken= accessToken;
-    // to save 
+// asign the accessToken into accesstoken of user of accestoekn colums
+    user.accessToken = accessToken;
+    // to save
     await user.save();
-
 
     const userResponse = user.toObject();
 
@@ -155,7 +157,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     });
   }
 };
-
+//to get all the user routes
 export const getUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const allUser = await User.find();
@@ -173,29 +175,28 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-/// fin by user name
+/// fin by user name succes:fail to run as logic
 export const userGetByName = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
   try {
     const { userName } = req.body;
+    
     //chek garne ya
-    const userCheck = userName.toLowerCase().trim();
-    const userExist = await User.findOne({userCheck });
-
+    const checkinguser= userName.toLowerCase().tirm()
+    const userExist = await User.findOne({userName:checkinguser});
     if (!userExist) {
       res.status(401).json({
         success: false,
         data: `the ${userName} didnot exist in our system`,
       });
     }
-    
-      res.status(402).json({
-        success: true,
-        data: `the ${userName} data is here`,
-      })
-    
+
+    res.status(402).json({
+      success: true,
+      data: userExist,
+    });
   } catch (exp) {
     console.log("the server got error", exp);
     res.status(500).json({
@@ -213,19 +214,32 @@ export const deleteUser = async (
 ): Promise<void> => {
   try {
     const { userId } = req.body;
+    if (!mongoose.isValidObjectId(userId)) {
+      res.status(400).json({
+        data: "this isnoo  valid ojects id",
+      });
+      return;
+    }
 
-    const userChecking = await User.findById({ users: userId });
+    const userChecking = await User.findById(userId);
 
     if (!userChecking) {
       res.status(400).json({
         data: `user not found `,
       });
+      return;
     }
     if (userChecking?.role !== UserRole.ADMIN) {
       res.status(402).json({ data: "the user isnot admin" });
       return;
     }
-    await User.findByIdAndDelete(userChecking);
+
+    await User.findByIdAndDelete(userId);
+
+    res.status(200).json({
+      succes: true,
+      data: "admin delte succesfully",
+    });
   } catch (e) {
     console.log("Delete user error", e);
     res.status(500).json({
@@ -236,33 +250,35 @@ export const deleteUser = async (
   }
 };
 
+///lougout as refereshtoke set as null into user.referestoken colums
+export const logoutUser = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const { refreshToken } = req.body;
 
-///lougout 
- export const logoutUser= async (req:Request,res:Response):Promise<void>=>{
-  try{
- const {refreshToken} = req.body;
- 
-  const checkRefreshToken= await User.findOne({refreshToken});
-  if(!checkRefreshToken){
-    res.status(402).json({
-      data:`invalid refresh token`
-   });
-    return;
-  }
+    const checkRefreshToken = await User.findOne({ refreshToken });
+    if (!checkRefreshToken) {
+      res.status(402).json({
+        data: `invalid refresh token`,
+      });
+      return;
+    }
 
-  checkRefreshToken.refreshToken=null;
-  
-  await checkRefreshToken.save();
-  res.status(200).json({
-    succes:true,
-    data:"succesfully logout"
-  })
-  }catch(exp){
-    console.log("error in serve",exp)
-     res.status(400).json({
-      success:false,
-      data:"internal server eeror"
-    })
+    checkRefreshToken.refreshToken = null;
+
+    await checkRefreshToken.save();
+    res.status(200).json({
+      succes: true,
+      data: "succesfully logout",
+    });
+  } catch (exp) {
+    console.log("error in serve", exp);
+    res.status(400).json({
+      success: false,
+      data: "internal server eeror",
+    });
   }
- 
-}
+};
+

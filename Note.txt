@@ -1,0 +1,162 @@
+npm init -y
+npm i express //framework 
+npm install -D typescrips ts-node-dev @type/node @type/express
+npx tsc -init // to inistlize aor execeute use npx example tsc 
+
+npm install mongoose
+npm install -D @types/mongoose
+npm install bcrypt
+npm install -D @types/bcrypt
+
+///axious,jtw token(acces,refresh)
+//react useSaate hook\
+
+1. CRUD
+   ↓
+2. Query Parameters
+   ↓
+3. Search
+   ↓
+4. Authentication
+   ↓
+5. Authorization
+   ↓
+6. Password Security
+   ↓
+7. Refresh Token
+   ↓
+8. Mongoose Relationships
+   ↓
+9. Validation & Error Handling
+   ↓
+10. Complete Postman Testing
+
+///
+# API Practice Checklist
+
+## 1. Complete CRUD
+
+* [ ] Register/Create User — `POST /register`
+* [ ] Get Users — `GET /getuser`
+* [ ] Get User By ID — `GET /getById`
+* [ ] Update User — `PUT /updateById`
+* [ ] Delete User — `DELETE /deleteById`
+* [ ] Test valid ObjectId
+* [ ] Test invalid ObjectId
+* [ ] Test user not found
+* [ ] Test duplicate email
+
+## 2. Query Parameters
+
+* [ ] Pagination — `?page=1&limit=10`
+* [ ] Filter by role — `?role=Admin`
+* [ ] Combine multiple filters
+* [ ] Handle invalid page/limit
+* [ ] Return total users
+* [ ] Return total pages
+
+## 3. Search
+
+* [ ] Search by username
+* [ ] Case-insensitive search
+* [ ] Partial-name search
+* [ ] Handle no search results
+* [ ] Practice MongoDB `$regex`
+
+## 4. Authentication Middleware
+
+* [ ] Create `authMiddleware`
+* [ ] Read Bearer token
+* [ ] Extract JWT from Authorization header
+* [ ] Verify JWT
+* [ ] Find user from token
+* [ ] Attach user to `req.user`
+* [ ] Reject missing token
+* [ ] Reject invalid token
+* [ ] Reject expired token
+* [ ] Protect private routes
+
+## 5. Role-Based Authorization
+
+* [ ] Create `authorizeRole()`
+* [ ] Allow `ADMIN`
+* [ ] Reject normal `USER`
+* [ ] Protect admin routes
+* [ ] Test `401 Unauthorized`
+* [ ] Test `403 Forbidden`
+* [ ] Test admin-only operations
+
+## 6. Password Security
+
+* [ ] Create change-password API
+* [ ] Verify old password
+* [ ] Hash new password with bcrypt
+* [ ] Prevent incorrect old password
+* [ ] Practice forgot-password flow
+* [ ] Practice reset-password flow
+* [ ] Prevent storing plain-text passwords
+
+## 7. Refresh Token
+
+* [ ] Create `/refresh-token`
+* [ ] Validate refresh token
+* [ ] Find user from refresh token
+* [ ] Generate new access token
+* [ ] Handle expired refresh token
+* [ ] Handle invalid refresh token
+* [ ] Test logout
+* [ ] Test refresh-token invalidation
+
+## 8. Mongoose Relationships
+
+### Create a `Post` model
+
+* [ ] Create Post
+* [ ] Get Posts
+* [ ] Get Post By ID
+* [ ] Update Post
+* [ ] Delete Post
+* [ ] Connect Post → User using ObjectId
+* [ ] Practice `.populate("author")`
+* [ ] Only allow post owner to edit
+* [ ] Only allow post owner to delete
+* [ ] Test invalid author ID
+
+## 9. Error Handling & Validation
+
+* [ ] Required-field validation
+* [ ] Email validation
+* [ ] Password validation
+* [ ] Phone validation
+* [ ] ObjectId validation
+* [ ] Duplicate email → `409`
+* [ ] Unauthorized → `401`
+* [ ] Forbidden → `403`
+* [ ] Not found → `404`
+* [ ] Server error → `500`
+* [ ] Handle Mongoose validation errors
+* [ ] Handle Mongoose CastError
+* [ ] Create centralized error handling
+
+## 10. Postman Testing
+
+* [ ] Create Postman Collection
+* [ ] Add all API requests
+* [ ] Test successful requests
+* [ ] Test invalid requests
+* [ ] Test authentication
+* [ ] Test authorization
+* [ ] Test edge cases
+* [ ] Add Postman assertions/tests
+* [ ] Record expected result
+* [ ] Record actual result
+* [ ] Add screenshots as evidence
+* [ ] Mark every test `PASS` / `FAIL`
+* [ ] Test `200` responses
+* [ ] Test `201` responses
+* [ ] Test `400` responses
+* [ ] Test `401` responses
+* [ ] Test `403` responses
+* [ ] Test `404` responses
+* [ ] Test `409` responses
+* [ ] Test `500` responses

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { registerUser,loginUser,getUser,userGetByName,deleteUser ,logoutUser} from "../controller/UserAuth";
 
+import {updateData} from "../controller/UserPatch"
 
 const router = Router();
 
@@ -15,6 +16,8 @@ router.get("/getbyname",userGetByName)
 // delte
 router.delete("/deleteById",deleteUser)
 
+// patch nad put
+router.patch("/patch",updateData)
 
 export default router;
 
