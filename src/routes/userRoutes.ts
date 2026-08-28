@@ -2,6 +2,7 @@ import { Router } from "express";
 import { registerUser,loginUser,getUser,userGetByName,deleteUser ,logoutUser, logoutEmail} from "../controller/UserAuth";
 
 import {passwordPatch, updateData} from "../controller/UserPatch"
+import { forgotPassword,resetPassword } from "../controller/userForgotPassword";
 
 const router = Router();
 
@@ -21,5 +22,10 @@ router.delete("/deleteById",deleteUser)
 router.patch("/patch",updateData)
 // patch old password wiht new 
 router.patch("/patchPassword",passwordPatch)
+
+//
+router.post("/forgotPassword",forgotPassword)
+router.post("/resetpassword",resetPassword)
+
 export default router;
 

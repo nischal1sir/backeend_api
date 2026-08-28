@@ -14,6 +14,8 @@ export interface IUser extends Document {
   approved: boolean;
   refreshToken: string | null;
   accessToken:String | null;
+  resetPasswordHash:String | null;
+  resetPasswordTime:Date | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -76,6 +78,14 @@ const userSchema = new Schema<IUser>(
     accessToken:{
       type:String,
       default:null
+    },
+    resetPasswordHash:{
+      type:String,
+
+    },
+    resetPasswordTime:{
+      type:Date,
+      
     },
     approved: {
       type: Boolean,

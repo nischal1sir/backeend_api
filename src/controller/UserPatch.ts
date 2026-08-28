@@ -99,7 +99,8 @@ export const passwordPatch= async(req:Request,res:Response):Promise<void>=>{
         })
         return
     }
-    const newPassBcrypt= await bcrypt.hash(oldPassword,12)
+    const saltRound=12
+    const newPassBcrypt= await bcrypt.hash(oldPassword,saltRound)
     validateUser.userPassword=newPassBcrypt
     await validateUser.save()
     res.status(200).json({
@@ -107,3 +108,5 @@ export const passwordPatch= async(req:Request,res:Response):Promise<void>=>{
         data:"the new password is succesfully update"
     })
 }
+
+
