@@ -184,16 +184,17 @@ export const userGetByName = async (
     const { userName } = req.body;
     
     //chek garne ya
-    const checkinguser= userName.toLowerCase().tirm()
+    const checkinguser= userName.toLowerCase()
     const userExist = await User.findOne({userName:checkinguser});
     if (!userExist) {
       res.status(401).json({
         success: false,
         data: `the ${userName} didnot exist in our system`,
       });
+      return
     }
 
-    res.status(402).json({
+    res.status(200).json({
       success: true,
       data: userExist,
     });
@@ -221,7 +222,7 @@ export const deleteUser = async (
       return;
     }
 
-    const userChecking = await User.findById(userId);
+    const userChecking = await User.findById({_id:userId});
 
     if (!userChecking) {
       res.status(400).json({
@@ -296,7 +297,7 @@ export const logoutEmail=async (req:Request,res:Response):Promise<void>=>{
       data:"email or password reuqired"
     })
     return;
-    return
+    
    }
    const caseEmail=userEmail.toLowerCase().trim()
    const checkUserExist= await User.findOne({userEmail:caseEmail}).select("+userPassword")

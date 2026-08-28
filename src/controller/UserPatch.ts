@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import User, { } from "../Model/usermodel";
 import {Request,Response } from "express";
+import bcrypt from "bcrypt"
 //patch it update only user send where put replace all !
 export const updateData= async (req:Request,res:Response):Promise<void>=>{
   try{
@@ -68,4 +69,41 @@ export const updateData= async (req:Request,res:Response):Promise<void>=>{
         data: "Internal server error"
     });
   }
+}
+
+
+//patch with old password and patch newpassword update
+export const passwordPatch= async(req:Request,res:Response):Promise<void>=>{
+    const {userId,oldPassword,newPassword}=req.body
+    if(!mongoose.isValidObjectId(userId)){
+        res.status(402).json({
+            data:"this user is not valid user id "
+        })
+        return
+    }
+    const validateUser= await User.findById({_id:userId}).select("+userPassword")
+
+    if(!validateUser){
+        res.status(402).json({
+            success:false,
+            data:"ths user dindot exist "
+        })
+        return
+    }
+    const checkingOldPassword= await bcrypt.compare(oldPassword,validateUser.userPassword)
+
+    if(!checkingOldPassword){
+        res.status(402).json({
+            success:false,
+            data:"the user old password isnot correct"
+        })
+        return
+    }
+    const newPassBcrypt= await bcrypt.hash(oldPassword,12)
+    validateUser.userPassword=newPassBcrypt
+    await validateUser.save()
+    res.status(200).json({
+        success:true,
+        data:"the new password is succesfully update"
+    })
 }
