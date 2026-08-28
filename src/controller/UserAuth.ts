@@ -114,6 +114,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       });
       return;
     }
+    
     //create the refresh token
     ///save the refresh tooken
     const refreshToken = jwt.sign(
@@ -123,12 +124,11 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 
     user.refreshToken = refreshToken;
 
-    const accessToken = jwt.sign(
-      {
-        userId: user._id,
-      },
-      process.env.ACCESS_SECRET!,
-    );
+ const accessToken= jwt.sign(
+  {userId:user._id},
+  process.env.ACCESS_SECRET!,
+  {expiresIn:"15m"}
+ )
 // asign the accessToken into accesstoken of user of accestoekn colums
     user.accessToken = accessToken;
     // to save
@@ -257,7 +257,12 @@ export const logoutUser = async (
 ): Promise<void> => {
   try {
     const { refreshToken } = req.body;
-
+if(!refreshToken){
+  res.status(400).json({
+    data:"refreshtoken provide "
+  })
+  return
+}
     const checkRefreshToken = await User.findOne({ refreshToken });
     if (!checkRefreshToken) {
       res.status(402).json({
@@ -282,3 +287,40 @@ export const logoutUser = async (
   }
 };
 
+
+//logout conecpt with the email 
+export const logoutEmail=async (req:Request,res:Response):Promise<void>=>{
+   const {userEmail,userPassword}=req.body;
+   if(!userEmail||!userPassword){
+    res.status(400).json({
+      data:"email or password reuqired"
+    })
+    return;
+    return
+   }
+   const caseEmail=userEmail.toLowerCase().trim()
+   const checkUserExist= await User.findOne({userEmail:caseEmail}).select("+userPassword")
+   if(!checkUserExist){
+    res.status(400).json({
+      succes:false,
+      data:"the user email insot available"
+    })
+    return
+   }
+   const comparePassword= await bcrypt.compare(userPassword,checkUserExist.userPassword);
+   if(!comparePassword){
+    res.status(400).json({
+      data:"the password dinot match"
+    })
+    return;
+   }
+  checkUserExist.accessToken=null;
+  checkUserExist.refreshToken=null;
+  await checkUserExist.save()
+
+  res.status(200).json({
+    data:`the user lougot succesfully of ${userEmail} `
+  })
+
+
+}
