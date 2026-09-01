@@ -19,6 +19,15 @@ export const adminMiddleware = async (
     }
 
     const token = authHeader.split(" ")[1];
+
+    if (!token) {
+      res.status(401).json({
+        success: false,
+        message: "Invalid token format",
+      });
+      return;
+    }
+
     const secret = process.env.ACCESS_SECRET || "access_secret";
 
     const decoded = jwt.verify(token, secret) as { userId?: string };
