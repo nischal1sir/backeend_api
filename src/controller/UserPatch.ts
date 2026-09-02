@@ -109,4 +109,13 @@ export const passwordPatch= async(req:Request,res:Response):Promise<void>=>{
     })
 }
 
+export const putMethod= async(req:Request,res:Response):Promise<void>=>{
+ try{
+
+ }catch(exp){
+    console.log("error while internal ",exp)
+ }
+
+ 
+}
 

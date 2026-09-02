@@ -9,7 +9,8 @@ npm install bcrypt
 npm install -D @types/bcrypt
 
 ///axious,jtw token(acces,refresh)
-//react useSaate hook\
+//react useSaate hook
+// to do : 1. Query Parameters 2.query 
 
 1. CRUD
    ↓
