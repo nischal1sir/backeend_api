@@ -325,3 +325,24 @@ export const logoutEmail=async (req:Request,res:Response):Promise<void>=>{
 
 
 }
+
+export const getUserByNameParam=async (req:Request,res:Response):Promise<void>=>{
+ try{
+
+   const {name}=req.query
+ if(typeof name!=="string" || !name.trim()){
+    res.json({success:false,message:"provide the valid queryname"})
+    return
+ }
+   const user=await User.findOne({userName:name.trim()})
+ 
+   if(!user){
+  res.json({message:"the user namd dindot exist"})
+   }
+   res.json({succes:true,data:name})
+ }catch(err){
+console.log("error mesage")
+ }
+
+
+}
