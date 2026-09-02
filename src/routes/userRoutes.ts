@@ -7,7 +7,8 @@ import {
   deleteUser,
   logoutUser,
   logoutEmail,
-  getUserByNameParam,
+  getUserByIdParam,
+  getUserByNameQuery,
 } from "../controller/UserAuth";
 
 import { passwordPatch, updateData } from "../controller/UserPatch";
@@ -37,6 +38,7 @@ router.patch("/patchPassword", passwordPatch);
 router.post("/forgotPassword", forgotPassword);
 router.post("/resetpassword", resetPassword);
 ///
-router.get("getUserQuery",getUserByNameParam)
+router.get("/getUserQuery",getUserByNameQuery)
+router.get("/getUserByIdParam/:id",getUserByIdParam)
 export default router;
 

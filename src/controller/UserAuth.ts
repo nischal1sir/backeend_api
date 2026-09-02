@@ -326,22 +326,40 @@ export const logoutEmail=async (req:Request,res:Response):Promise<void>=>{
 
 }
 
-export const getUserByNameParam=async (req:Request,res:Response):Promise<void>=>{
+export const getUserByNameQuery=async (req:Request,res:Response):Promise<void>=>{
  try{
 
    const {name}=req.query
- if(typeof name!=="string" || !name.trim()){
-    res.json({success:false,message:"provide the valid queryname"})
-    return
- }
-   const user=await User.findOne({userName:name.trim()})
+   if(typeof name!=="string"){
+     res.json({success:false,message:"provide the valid queryname"})
+     return
+    }
+  const caseSensetive= name.trim();
+   const user=await User.findOne({userName:caseSensetive})
  
    if(!user){
   res.json({message:"the user namd dindot exist"})
    }
-   res.json({succes:true,data:name})
+   res.json({succes:true,data:user})
  }catch(err){
 console.log("error mesage")
+ }
+}
+export const getUserByIdParam=async (req:Request,res:Response):Promise<void>=>{
+ try{
+
+   const {userId}=req.params
+  if(!mongoose.isValidObjectId(userId)){
+    res.json({message:"this is not valid mongooess id"})
+  }
+   const user=await User.findById({_id:userId})
+ 
+   if(!user){
+  res.json({message:"the user namd dindot exist"})
+   }
+   res.json({succes:true,data:user})
+ }catch(err){
+console.log("error mesage",err)
  }
 
 

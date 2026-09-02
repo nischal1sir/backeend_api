@@ -8,6 +8,14 @@ npm install -D @types/mongoose
 npm install bcrypt
 npm install -D @types/bcrypt
 
+
+
+1.to install ejsp for ejs pages 
+install ejs from npm 
+npm install -D @types/ejs
+2.setup ejs as view engine 
+
+
 ///axious,jtw token(acces,refresh)
 //react useSaate hook
 // to do : 1. Query Parameters 2.query 

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="min-h-screen bg-slate-100 px-4 py-10 text-slate-900">
+    <main class="mx-auto max-w-xl rounded-xl bg-white p-6 shadow-lg sm:p-8">
+        <h1 class="mb-6 text-2xl font-bold">Contact us</h1>
+
+        <form class="space-y-5" method="post">
+            <div>
+                <label class="mb-2 block text-sm font-medium" for="name">Name</label>
+                <input
+                    class="w-full rounded-lg border border-slate-300 px-3 py-2 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                    id="name"
+                    name="name"
+                    type="text"
+                    placeholder="Enter your name"
+                    required
+                >
+            </div>
+
+            <div>
+                <label class="mb-2 block text-sm font-medium" for="message">Message</label>
+                <textarea
+                    class="min-h-32 w-full resize-y rounded-lg border border-slate-300 px-3 py-2 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                    id="message"
+                    name="message"
+                    placeholder="Write your message"
+                    required
+                ></textarea>
+            </div>
+
+            <button
+                class="w-full rounded-lg bg-blue-600 px-4 py-2.5 font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2"
+                type="submit"
+            >
+                Submit
+            </button>
+        </form>
+<div class=""task flex-column gap-3 >
+
+    <div class=" task hidden mt-6 rounded-lg border border-slate-200 bg-slate-50 p-4">
+        <h1 class="text-sm text-slate-600">list some task</h1>
+        <p class="text-sm text-slate-600">We will get back to you soon.</p>
+    </div>
+    <div class=" task hidden mt-6 rounded-lg border border-slate-200 bg-slate-50 p-4">
+        <h1 class="text-sm text-slate-600">list some task</h1>
+        <p class="text-sm text-slate-600">We will get back to you soon.</p>
+    </div>
+    <div class=" task hidden mt-6 rounded-lg border border-slate-200 bg-slate-50 p-4">
+        <h1 class="text-sm text-slate-600">list some task</h1>
+        <p class="text-sm text-slate-600">We will get back to you soon.</p>
+    </div>
+    <h1 class="text-black m-20 text-center">There is no task</h1>
+</div>
+    </main>
+    
+</body>
+</html>
