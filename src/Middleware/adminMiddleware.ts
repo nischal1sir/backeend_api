@@ -20,7 +20,7 @@ export const adminMiddleware = async (
       });
       return;
     }
-
+    console.log(authHeader)
     const token = authHeader.split(" ")[1];
 
     if (!token) {
@@ -71,3 +71,50 @@ export const adminMiddleware = async (
     });
   }
 };
+
+
+export const adminOnly= async (req:Request,res:Response,next:NextFunction):Promise<void>=>{
+  try {
+
+    const dataToken = req.headers.authorization;
+  
+    if(!dataToken|| !dataToken.startsWith("Bearer ")){
+      res.json({
+        message:"the toekn should be string "
+      })
+      return
+    }
+    const finalToken=dataToken.split(" ")[1];
+  
+    if(!finalToken){
+      res.json({message:"this toekn should be vaild "})
+      return
+    }
+    const validToken= process.env.ACCESS_SECRET || "secret_token"
+    const decodValidtoken=jwt.verify(finalToken,validToken) as {userId?:string};
+    if(!decodValidtoken.userId){
+      res.json({message:"the provie jwt token is not valid or expire "})
+      return 
+    }
+    const user=await User.findById(decodValidtoken.userId);
+
+    if(!user){
+      res.json({message:"the user dosnot exist "})
+      return 
+    }
+    if(user.role!==UserRole.USER){
+      res.json({
+
+        onmessage:"this isnot a user only amdin would be delelte"
+      })
+      return 
+
+    }
+    user.refreshToken=null;
+      user.accessToken=null;
+    next();
+  }
+  catch(err){
+    console.log("error this",err)
+  }
+}

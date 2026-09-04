@@ -13,7 +13,7 @@ import {
 
 import { passwordPatch, updateData } from "../controller/UserPatch";
 import { forgotPassword, resetPassword } from "../controller/userForgotPassword";
-import { adminMiddleware } from "../Middleware/adminMiddleware";
+import { adminMiddleware, adminOnly } from "../Middleware/adminMiddleware";
 
 const router = Router();
 
@@ -24,7 +24,7 @@ router.post("/logout", logoutUser);
 //louout by email into body which make refreshtoken as null
 router.post("/logoutEmail", logoutEmail);
 
-router.get("/getuser", adminMiddleware, getUser);
+router.get("/getuser", adminMiddleware,adminOnly, getUser);
 router.get("/getbyname", userGetByName);
 // delte
 router.delete("/deleteById", deleteUser);
